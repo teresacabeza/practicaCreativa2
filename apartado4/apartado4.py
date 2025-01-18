@@ -17,12 +17,12 @@ os.system('sudo apt-get update')
 os.system('sudo apt-get install -y docker-ce docker-ce-cli containerd.io')
 
 #Establece el proyecto de Google Cloud Platform y habilita el servicio de Kubernetes Engine en Google Cloud Platform
-os.system('sudo gcloud config set project norse-block-448119-j1')     
-os.system('sudo gcloud services enable container.googleapis.com')
+#os.system('sudo gcloud config set project norse-block-448119-j1')     
+#os.system('sudo gcloud services enable container.googleapis.com')
 
 
 # Crea los pods a partir de los archivos de configuracion .yaml (sino funciona añadir --disk-size=20)
-os.system('sudo gcloud container clusters create clusterkubernetes --num-nodes=3 --zone=us-central1-a --no-enable-autoscaling') 
+os.system('sudo gcloud container clusters create clusterkubernetes --num-nodes=3 --zone=europe-southwest1-c --no-enable-autoscaling') 
 
 
 os.system('sudo kubectl apply -f productpage.yaml')
