@@ -25,7 +25,7 @@ services:
 
   reviews:
     build:
-      context: practica_creativa2/bookinfo/src/reviews/reviews-wlpcfg
+      context: ./reviews
       dockerfile: Dockerfile
     environment:
       SERVICE_VERSION: v3
