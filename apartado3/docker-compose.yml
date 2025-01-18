@@ -2,7 +2,7 @@ version: '3'
 services:
   productpage:
     build:
-      context: ./productpage
+      context: .
       dockerfile: Dockerfile
     environment:
       GROUP_NUMBER: 16
@@ -13,7 +13,7 @@ services:
 
   details:
     build:
-      context: ./details
+      context: .
       dockerfile: Dockerfile
     environment:
       SERVICE_VERSION: v1
@@ -25,7 +25,7 @@ services:
 
   reviews:
     build:
-      context: ./reviews
+      context: practica_creativa2/bookinfo/src/reviews/reviews-wlpcfg   # Usamos el que ya esta creado
       dockerfile: Dockerfile
     environment:
       SERVICE_VERSION: v3
@@ -38,7 +38,7 @@ services:
 
   ratings:
     build:
-      context: ./ratings
+      context: .
       dockerfile: Dockerfile
     environment:
       SERVICE_VERSION: v1
