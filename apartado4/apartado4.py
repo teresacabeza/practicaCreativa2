@@ -22,7 +22,7 @@ os.system('sudo gcloud services enable container.googleapis.com')
 
 
 # Crea los pods a partir de los archivos de configuracion .yaml (sino funciona añadir --disk-size=20)
-os.system('sudo gcloud container clusters create clusterkubernetes --num-nodes=5 --zone=us-central1-a --no-enable-autoscaling') 
+os.system('sudo gcloud container clusters create clusterkubernetes --num-nodes=3 --zone=us-central1-a --no-enable-autoscaling') 
 
 
 os.system('sudo kubectl apply -f productpage.yaml')
