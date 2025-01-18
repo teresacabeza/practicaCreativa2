@@ -46,4 +46,3 @@ services:
       - "9083:9080"  # Cambiado el puerto local para evitar conflictos
     container_name: "ratings-16"
     image: "ratings/16"
-#jdjdls
