@@ -1,6 +1,7 @@
 #!usr/bin/python3
 from subprocess import call
 import os
+import subprocess
 
 #Instalamos Docker
 call(['sudo', 'apt-get', 'install', '-y', 'docker.io'])
