@@ -18,6 +18,10 @@ call(['sudo', 'apt-get', 'update'])
 os.chdir('practica_creativa2/bookinfo/src/reviews')
 os.system('sudo docker run --rm -u root -v "$(pwd)":/home/gradle/project -w /home/gradle/project gradle:4.8.1 gradle clean build')
 os.chdir(os.path.expanduser("~"))
+print("Directorio actual")
+subprocess.run(['pwd'])
+print("Archivos en el directorio actual")
+subprocess.run(['ls', '-l'])
 
 #Situarnos en la carpeta donde se encuentra docker-compose.yaml e iniciar los servicios definidos en ese archivo
 #os.chdir('practica_creativa2/bookinfo/src')
