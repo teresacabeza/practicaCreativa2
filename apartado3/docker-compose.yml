@@ -3,7 +3,7 @@ services:
   productpage:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_productpage
     environment:
       GROUP_NUMBER: 16
     ports:
@@ -14,7 +14,7 @@ services:
   details:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_details
     environment:
       SERVICE_VERSION: v1
       ENABLE_EXTERNAL_BOOK_SERVICE: "true"
@@ -39,7 +39,7 @@ services:
   ratings:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_ratings
     environment:
       SERVICE_VERSION: v1
     ports:
