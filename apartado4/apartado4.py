@@ -1,72 +1,58 @@
 import os
+import subprocess
 
-def iniciar_minikube():
-    """
-    Inicia Minikube con Docker como controlador.
-    """
-    print("Iniciando Minikube...")
-    os.system('minikube start --driver=docker --disk-size=20g')
-
-def aplicar_archivos_yaml():
-    """
-    Aplica los archivos YAML necesarios para configurar los servicios y despliegues.
-    """
-    print("Aplicando archivos YAML...")
-    yaml_files = [
-        'productpage.yaml',
-        'details.yaml',
-        'ratings.yaml',
-        'reviews-service.yaml',
-        'reviews-v3-deployment.yaml'
-    ]
-    
-    for yaml_file in yaml_files:
-        print(f"Aplicando {yaml_file}...")
-        os.system(f'kubectl apply -f {yaml_file}')
-
-def verificar_pods():
-    """
-    Verifica el estado de los pods.
-    """
-    print("Verificando el estado de los pods...")
-    os.system('kubectl get pods')
-
-def verificar_servicios():
-    """
-    Verifica el estado de los servicios.
-    """
-    print("Verificando el estado de los servicios...")
-    os.system('kubectl get services')
-
-def exponer_servicio(service_name):
-    """
-    Expone un servicio específico usando Minikube.
-    """
-    print(f"Exponiendo el servicio {service_name}...")
-    os.system(f'minikube service {service_name}')
-
-def ejecutar():
-    """
-    Función principal que ejecuta todos los pasos necesarios.
-    """
+def ejecutar_comando(comando):
+    """Ejecuta un comando en la terminal y muestra el resultado."""
     try:
-        # Paso 1: Iniciar Minikube
-        iniciar_minikube()
+        print(f"Ejecutando: {comando}")
+        resultado = subprocess.run(comando, shell=True, check=True, text=True)
+        print(resultado.stdout)
+    except subprocess.CalledProcessError as e:
+        print(f"Error al ejecutar el comando: {comando}")
+        print(e)
 
-        # Paso 2: Aplicar los archivos YAML
-        aplicar_archivos_yaml()
+# 1. Iniciar Minikube
+print("Iniciando Minikube...")
+ejecutar_comando("minikube start --driver=docker")
 
-        # Paso 3: Verificar estado de los pods y servicios
-        verificar_pods()
-        verificar_servicios()
+# 2. Configurar Minikube para usar imágenes locales
+print("Configurando Minikube para usar imágenes locales...")
+ejecutar_comando("eval $(minikube docker-env)")
 
-        # Paso 4: Exponer el servicio principal (productpage)
-        exponer_servicio('productpage')
+# 3. Construir las imágenes Docker
+imagenes = [
+    ("productpage", "Dockerfile", "./productpage"),
+    ("details", "Dockerfile", "./details"),
+    ("reviews", "Dockerfile", "./reviews"),
+    ("ratings", "Dockerfile", "./ratings")
+]
 
-        print("Despliegue completado con éxito.")
+for nombre, dockerfile, context in imagenes:
+    print(f"Construyendo imagen {nombre}...")
+    ejecutar_comando(f"docker build -t jorgerguezz/{nombre}:16 -f {context}/{dockerfile} {context}")
 
-    except Exception as e:
-        print(f"Error durante el despliegue: {e}")
+# 4. Aplicar archivos YAML
+yamls = [
+    "productpage.yaml",
+    "details.yaml",
+    "ratings.yaml",
+    "reviews-service.yaml",
+    "reviews-v3-deployment.yaml"  # Cambia según tu versión
+]
 
-if __name__ == "__main__":
-    ejecutar()
+for yaml in yamls:
+    print(f"Aplicando {yaml}...")
+    ejecutar_comando(f"kubectl apply -f {yaml}")
+
+# 5. Verificar estado de Pods y Servicios
+print("Verificando estado de los Pods...")
+ejecutar_comando("kubectl get pods")
+
+print("Verificando estado de los Servicios...")
+ejecutar_comando("kubectl get services")
+
+# 6. Exponer servicio principal
+print("Exponiendo servicio productpage...")
+ejecutar_comando("minikube service productpage --url")
+
+print("¡Todo listo! Verifica tu servicio en la URL expuesta por Minikube.")

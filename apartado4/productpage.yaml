@@ -39,7 +39,7 @@ spec:
       - name: productpage
         image: jorgerguezz/productpage   #16/productpage
         imagePullPolicy: IfNotPresent  
-        ports:
+        ports:pero
         - containerPort: 9080
         securityContext:
           runAsUser: 1000
