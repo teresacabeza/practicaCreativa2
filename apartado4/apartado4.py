@@ -17,7 +17,7 @@ os.system('sudo apt-get update')
 os.system('sudo apt-get install -y docker-ce docker-ce-cli containerd.io')
 
 #Establece el proyecto de Google Cloud Platform y habilita el servicio de Kubernetes Engine en Google Cloud Platform
-os.system('sudo gcloud config set project norse-block-448119-j1')     
+os.system('sudo gcloud config set project practicaCraetiva2')     
 os.system('sudo gcloud services enable container.googleapis.com')
 
 
