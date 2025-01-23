@@ -1,39 +1,72 @@
-#!usr/bin/python3
 import os
 
-#Descarga las imagenes del repositorio Docker Hub
-os.system('sudo docker pull jorgerguezz/details:16')
-os.system('sudo docker pull jorgerguezz/productpage:16')
-os.system('sudo docker pull jorgerguezz/reviews:16')
-os.system('sudo docker pull jorgerguezz/ratings:16')
+def iniciar_minikube():
+    """
+    Inicia Minikube con Docker como controlador.
+    """
+    print("Iniciando Minikube...")
+    os.system('minikube start --driver=docker --disk-size=20g')
 
-#Configuracion para usar Docker con Kubernetes
-os.system('sudo apt-get remove docker docker-engine docker.io containerd runc')
-os.system('sudo apt-get update')
-os.system('sudo apt-get install -y ca-certificates curl gnupg lsb-release')
-os.system('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg')
-os.system('echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null')
-os.system('sudo apt-get update')
-os.system('sudo apt-get install -y docker-ce docker-ce-cli containerd.io')
+def aplicar_archivos_yaml():
+    """
+    Aplica los archivos YAML necesarios para configurar los servicios y despliegues.
+    """
+    print("Aplicando archivos YAML...")
+    yaml_files = [
+        'productpage.yaml',
+        'details.yaml',
+        'ratings.yaml',
+        'reviews-service.yaml',
+        'reviews-v3-deployment.yaml'
+    ]
+    
+    for yaml_file in yaml_files:
+        print(f"Aplicando {yaml_file}...")
+        os.system(f'kubectl apply -f {yaml_file}')
 
-#Establece el proyecto de Google Cloud Platform y habilita el servicio de Kubernetes Engine en Google Cloud Platform
-os.system('sudo gcloud config set project norse-block-448119-j1')     
-os.system('sudo gcloud services enable container.googleapis.com')
+def verificar_pods():
+    """
+    Verifica el estado de los pods.
+    """
+    print("Verificando el estado de los pods...")
+    os.system('kubectl get pods')
 
+def verificar_servicios():
+    """
+    Verifica el estado de los servicios.
+    """
+    print("Verificando el estado de los servicios...")
+    os.system('kubectl get services')
 
-# Crea los pods a partir de los archivos de configuracion .yaml (sino funciona añadir --disk-size=20)
-os.system('sudo gcloud container clusters create clusterkubernetes --num-nodes=3 --zone=europe-southwest1-c --no-enable-autoscaling') 
+def exponer_servicio(service_name):
+    """
+    Expone un servicio específico usando Minikube.
+    """
+    print(f"Exponiendo el servicio {service_name}...")
+    os.system(f'minikube service {service_name}')
 
+def ejecutar():
+    """
+    Función principal que ejecuta todos los pasos necesarios.
+    """
+    try:
+        # Paso 1: Iniciar Minikube
+        iniciar_minikube()
 
-os.system('sudo kubectl apply -f productpage.yaml')
-os.system('sudo kubectl apply -f details.yaml')
-os.system('sudo kubectl apply -f ratings.yaml')
-os.system('sudo kubectl apply -f reviews-service.yaml')
+        # Paso 2: Aplicar los archivos YAML
+        aplicar_archivos_yaml()
 
-# Se puede elegir la version que queramos 
-#os.system('sudo kubectl apply -f reviews-v1-deployment.yaml')
-#os.system('sudo kubectl apply -f reviews-v2-deployment.yaml')
-os.system('sudo kubectl apply -f reviews-v3-deployment.yaml')
+        # Paso 3: Verificar estado de los pods y servicios
+        verificar_pods()
+        verificar_servicios()
 
-# Lanzamos el servicio
-os.system('sudo kubectl expose deployment productpage --type=LoadBalancer --port=9080')
+        # Paso 4: Exponer el servicio principal (productpage)
+        exponer_servicio('productpage')
+
+        print("Despliegue completado con éxito.")
+
+    except Exception as e:
+        print(f"Error durante el despliegue: {e}")
+
+if __name__ == "__main__":
+    ejecutar()
