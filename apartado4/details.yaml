@@ -41,7 +41,7 @@ spec:
       containers:
       - name: details
         env:
-        image: jorgerguezz/details  #16/details
+        image: jorgerguezz/details:16  #16/details
         imagePullPolicy: IfNotPresent
         ports:
           - containerPort: 9080

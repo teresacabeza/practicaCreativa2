@@ -7,7 +7,7 @@ def build(version):
     os.system('kubectl apply -f ratings.yaml')
     os.system('kubectl apply -f details.yaml')
     os.system('kubectl apply -f reviews-service.yaml')
-    os.system(f'kubectl apply -f reviews-{version}-deployment.yaml')
+    os.system(f'kubectl apply -f reviews-{version}-deployments.yaml')
 
 def delete():
     os.system('kubectl delete --all deployments && kubectl delete --all pods && kubectl delete --all services')
@@ -20,13 +20,13 @@ if len(param) < 2:
 
 command = param[1]
 
-if command == "build":
+if command == "construir":
     if len(param) < 3:
-        print("Please specify a version (e.g., v1, v2, v3)")
+        print("Especifica la versión(e.g., v1, v2, v3)")
         sys.exit(1)
     version = param[2]
     build(version)
-elif command == "delete":
+elif command == "borrar":
     delete()
 else:
-    print("Unknown command")
+    print("Comando desconocido")

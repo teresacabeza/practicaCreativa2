@@ -39,7 +39,7 @@ spec:
     spec:
       containers:
       - name: ratings
-        image: jorgerguezz/ratings     #<GROUP_NUMBER>=16  16/ratings
+        image: jorgerguezz/ratings:16    #<GROUP_NUMBER>=16  16/ratings
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 9080
