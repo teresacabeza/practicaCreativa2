@@ -1,5 +1,5 @@
 import logging, subprocess, os
-from subprocess import call
+
 
 GRUP_NUM = 16 # Variable de entorno con el número de grupo. No se si la tengo que definir aquí, en el script principal o en un json aparte.
 GRUP_NOM = 'g16'
@@ -32,34 +32,39 @@ def docker_destroy():
 
 
 # 3. DESPLIEGUE DE LA APLICACIÓN USANDO DOCKER-COMPOSE
- def mv_docker_compose ():
+ import os
+import subprocess
 
-  call(['sudo', 'apt-get', 'install', '-y', 'docker.io'])
-  call(['sudo', 'apt-get', 'install', '-y', 'docker-compose'])
+def mv_docker_compose():
+    """Realiza las configuraciones e inicia los servicios con Docker Compose."""
 
-#Instalaciones en la máquina virtual
-  call(['sudo', 'apt-get', 'upgrate'])
-  call(['sudo', 'apt-get', 'install', '-y', 'python3-pip']) 
-  call(['sudo', 'apt-get', 'install', '-y','git'])
-  call(['git', 'clone', 'https://github.com/CDPS-ETSIT/practica_creativa2.git'])
-  call(['sudo', 'apt-get', 'update'])
+    # Instalar Docker y otras dependencias necesarias
+    subprocess.call(['sudo', 'apt-get', 'install', '-y', 'docker.io'])
+    subprocess.call(['sudo', 'apt-get', 'install', '-y', 'docker-compose'])
+    subprocess.call(['sudo', 'apt-get', 'update'])
+    subprocess.call(['sudo', 'apt-get', 'upgrade'])
+    subprocess.call(['sudo', 'apt-get', 'install', '-y', 'python3-pip'])
+    subprocess.call(['sudo', 'apt-get', 'install', '-y', 'git'])
 
+    # Clonar el repositorio necesario
+    subprocess.call(['git', 'clone', 'https://github.com/CDPS-ETSIT/practica_creativa2.git'])
 
-#Ejecutar el comando que dice el enunciado en la ruta src/reviews:				
-  os.chdir('practica_creativa2/bookinfo/src/reviews')
-  os.system('sudo docker run --rm -u root -v "$(pwd)":/home/gradle/project -w /home/gradle/project gradle:4.8.1 gradle clean build')
-  os.chdir(os.path.expanduser("~"))
-  os.chdir('practicaCreativa2/apartado3')
-#print("Directorio actual")
-#subprocess.run(['pwd'])
-#print("Archivos en el directorio actual")
-#subprocess.run(['ls', '-l'])
+    # Compilar el servicio "reviews"
+    os.chdir('practica_creativa2/bookinfo/src/reviews')
+    os.system('sudo docker run --rm -u root -v "$(pwd)":/home/gradle/project -w /home/gradle/project gradle:4.8.1 gradle clean build')
 
+    # Volver al directorio original y listar los archivos para verificar
+    os.chdir(os.path.expanduser("~"))
+    os.chdir('practicaCreativa2/apartado3')
+    print("Directorio actual")
+    subprocess.run(['pwd'])
+    print("Archivos en el directorio actual")
+    subprocess.run(['ls', '-l'])
 
-#Situarnos en la carpeta donde se encuentra docker-compose.yaml e iniciar los servicios definidos en ese archivo
-#os.chdir('practica_creativa2/bookinfo/src')
-  call(['sudo', 'docker-compose', 'build'])
-  call(['sudo', 'docker-compose', 'up', '-d'])
+    # Construir e iniciar los servicios definidos en docker-compose.yaml
+    subprocess.call(['sudo', 'docker-compose', 'build'])
+    subprocess.call(['sudo', 'docker-compose', 'up', '-d'])
+
   
 #   # Clonar repositorio de la app
 #   # subprocess.call(['git', 'clone', 'https://github.com/CDPS-ETSIT/practica_creativa2.git', './bloque3'])
