@@ -32,9 +32,6 @@ def docker_destroy():
 
 
 # 3. DESPLIEGUE DE LA APLICACIÓN USANDO DOCKER-COMPOSE
- import os
-import subprocess
-
 def mv_docker_compose():
     """Realiza las configuraciones e inicia los servicios con Docker Compose."""
 
