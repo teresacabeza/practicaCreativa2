@@ -28,11 +28,7 @@ def main():
             mv_docker()
         elif sys.argv[2] == "destruir":
             docker_destroy()
-    elif orden == "parte3":
-        if sys.argv[2] == "start":
-            mv_docker_compose()
-        elif sys.argv[2] == "destruir":
-            docker_destroy()
+
         
     else:
         print(f"Orden no reconocida: {orden}")
