@@ -6,7 +6,7 @@ def build(version):
     os.system('kubectl apply -f productpage.yaml')
     os.system('kubectl apply -f ratings.yaml')
     os.system('kubectl apply -f details.yaml')
-    os.system('kubectl apply -f reviews-svc.yaml')
+    os.system('kubectl apply -f reviews-service.yaml')
     os.system(f'kubectl apply -f reviews-{version}-deployment.yaml')
 
 def delete():
